@@ -4,15 +4,17 @@ import numpy as np
 
 class EightPuzzle:
     @staticmethod
-    def create_user_input_matrix():
+    def create_user_input_matrix() -> np.ndarray:
         print("Digite os números de cada linha da matriz, separando-os por espaço")
+
         print("Linha 1:", )
         a = [int(x) for x in input().split()]
         print("Linha 2:", )
         b = [int(x) for x in input().split()]
         print("Linha 3")
         c = [int(x) for x in input().split()]
-        return (np.vstack((a, b, c)))
+
+        return np.vstack((a, b, c))
 
     @staticmethod
     def create_input_matrix() -> np.ndarray:
