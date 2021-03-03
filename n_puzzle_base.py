@@ -9,6 +9,7 @@ class NPuzzleBase():
         self.n_1 = self.n + 1
         self.n_root = int(math.sqrt(self.n_1))
         self.matrix = self.create_input_matrix()
+        self.target_matrix = self.create_target_matrix()
 
     # @staticmethod
     # def create_user_input_matrix() -> np.ndarray:
@@ -29,12 +30,15 @@ class NPuzzleBase():
 
         return matrix
 
-    def check_if_is_target_matrix(self) -> bool:
+    def create_target_matrix(self) -> np.ndarray:
         target_matrix = list(np.arange(1, self.n_1))
         target_matrix.append(0)
         target_matrix = np.reshape(target_matrix, (self.n_root, self.n_root))
 
-        comparison = self.matrix == target_matrix
+        return target_matrix
+
+    def check_if_is_target_matrix(self) -> bool:
+        comparison = self.matrix == self.target_matrix
         if comparison.all():
             return True
         return False
@@ -94,7 +98,7 @@ class NPuzzleBase():
         i, j = cls.find_index(matrix)
 
         # If blank tile is not in right column
-        if j != len(matrix) -1:
+        if j != len(matrix) - 1:
             temp_arr = np.copy(matrix)
             # Swap blank tile with right tile
             temp_arr[i, j] = temp_arr[i, j+1]
