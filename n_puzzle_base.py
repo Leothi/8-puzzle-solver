@@ -2,6 +2,8 @@ import random
 import math
 import numpy as np
 
+from loguru import logger
+
 
 class NPuzzleBase():
     def __init__(self, n):
@@ -43,9 +45,16 @@ class NPuzzleBase():
             return True
         return False
 
+    @staticmethod
+    def is_even(number: int) -> bool:
+        if (number % 2) == 0:
+            return True
+        return False
+
     def check_if_solvable(self) -> bool:
         flatten_matrix = list(i for j in self.matrix for i in j if i != 0)
 
+        # Counting number of inversions
         counter_inv = 0
         # Getting current number
         for i in range(len(flatten_matrix)):
@@ -57,16 +66,35 @@ class NPuzzleBase():
                 if next_num < current_num:
                     counter_inv += 1
 
-        if (counter_inv % 2) == 0:
-            return True
+        n_is_even = self.is_even(self.n)
+        counter_inv_is_even = self.is_even(counter_inv)
+        # If n is even, counter_inv needs to be even
+        if n_is_even:
+            if counter_inv_is_even:
+                return True
+        # If n is odd...
+        else:
+            i, _ = self.find_index(self.matrix)
+            # Row starting from bottom and at 1
+            row_blank_from_bottom = len(self.matrix) - i
+            row_from_botton_is_even = self.is_even(row_blank_from_bottom)
+
+            # If index from bottom is even, counter_inv needs to be odd
+            if row_from_botton_is_even:
+                if not counter_inv_is_even:
+                    return True
+            # If index from bottom is odd, counter_inv needs to be even
+            else:
+                if counter_inv_is_even:
+                    return True
         return False
 
     def check_both_conditions(self) -> bool:
         if not self.check_if_is_target_matrix():
             if self.check_if_solvable():
-                print("Matriz de entrada COM solução.")
+                logger.debug("Matriz de entrada COM solução.")
                 return True
-            print("Matriz de entrada SEM solução.")
+            logger.warning("Matriz de entrada SEM solução.")
         return False
 
     @ classmethod

@@ -2,6 +2,9 @@ import numpy as np
 import time
 
 from n_puzzle_base import NPuzzleBase
+from loguru import logger
+
+logger.add('logger_puzzle.log')
 
 
 class Node:
@@ -27,6 +30,7 @@ class BFSSolver(NPuzzleBase):
             return None
 
     def solve(self, node):
+        logger.debug("Solucionando...")
         actions = ["down", "up", "left", "right"]
         goal_node = self.target_matrix
         node_q = [node]
@@ -47,29 +51,33 @@ class BFSSolver(NPuzzleBase):
                 temp_data = self.move_tile(move, current_root.data)
                 if temp_data is not None:
                     node_counter += 1
-                    child_node = Node(node_counter, np.array(temp_data), 
+                    child_node = Node(node_counter, np.array(temp_data),
                                       current_root, move)  # Create a child node
 
-                    if child_node.data.tolist() not in final_nodes:  
+                    if child_node.data.tolist() not in final_nodes:
                         node_q.append(child_node)
-                        final_nodes.append(child_node.data.tolist()) # Add the child node data in final node list
+                        # Add the child node data in final node list
+                        final_nodes.append(child_node.data.tolist())
                         visited.append(child_node)
                         if child_node.data.tolist() == goal_node.tolist():
-                            print("Objetivo alcançado")
+                            logger.success("Problema solucionado.")
                             return child_node, final_nodes, visited
         return None, None, None  # return statement if the goal node is not reached
 
 
 if __name__ == '__main__':
-    bfs = BFSSolver(3)
+    n = 8
+    logger.info(f"Iniciando {n}-Puzzle")
+
+    bfs = BFSSolver(n)
     matrix = bfs.matrix
-    print(matrix)
-    
+    logger.debug(f"Matriz de entrada: \n{matrix}")
+
     if bfs.check_both_conditions():
         root = Node(0, matrix, None, None)
         start = time.time()
         goal, f_nodes, visited_nodes = bfs.solve(root)
         end = time.time()
         if goal:
-            print(end - start)
-            print(goal.data)
+            logger.info(f"Tempo: {end - start} segundos.")
+            logger.info(f"Resultado: \n{goal.data}")
