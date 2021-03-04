@@ -44,7 +44,7 @@ class BFSSolver(NPuzzleBase):
         while node_q:
             current_root = node_q.pop(0)  # Pop the element 0 from the list
             if current_root.data.tolist() == goal_node.tolist():
-                print("Goal reached")
+                logger.success("Problema solucionado.")
                 return current_root, final_nodes, visited
 
             for move in actions:
