@@ -1,1 +1,1 @@
-# 8-puzzle-solver
+# n-puzzle-solver
