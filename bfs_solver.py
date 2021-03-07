@@ -1,10 +1,32 @@
+import sys
 import numpy as np
 import time
 
+from logger import DEFAULT_FORMAT
 from n_puzzle_base import NPuzzleBase
 from loguru import logger
 
-logger.add('logger_puzzle.log')
+# Configuração do Logger
+logger.configure(
+    handlers=[
+        {
+            "sink": sys.stdout,
+            "level": 10,
+            "format": DEFAULT_FORMAT
+        }
+    ]
+)
+
+
+N = 3
+# Saída para arquivo logger
+logger.add(f'./logs/{N}_puzzle.log', level=0, format=DEFAULT_FORMAT)
+logger.add(f'./logs/{N}_puzzle_info.log', level=20, format=DEFAULT_FORMAT)
+logger.add(f'./logs/{N}_puzzle_stats.log', level=38, format=DEFAULT_FORMAT)
+
+
+# Criação de Levels
+logger.level(f"STATISTICS", no=38, color="<light-green>")
 
 
 class Node:
@@ -66,10 +88,9 @@ class BFSSolver(NPuzzleBase):
 
 
 if __name__ == '__main__':
-    n = 8
-    logger.info(f"Iniciando {n}-Puzzle")
+    logger.info(f"Iniciando {N}-Puzzle")
 
-    bfs = BFSSolver(n)
+    bfs = BFSSolver(N)
     matrix = bfs.matrix
     logger.debug(f"Matriz de entrada: \n{matrix}")
 
@@ -79,5 +100,5 @@ if __name__ == '__main__':
         goal, f_nodes, visited_nodes = bfs.solve(root)
         end = time.time()
         if goal:
-            logger.info(f"Tempo: {end - start} segundos.")
-            logger.info(f"Resultado: \n{goal.data}")
+            logger.log("STATISTICS",
+                       f"Tempo: {end - start} segundos. Número de passos: {len(visited_nodes)}")
