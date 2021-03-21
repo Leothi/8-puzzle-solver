@@ -98,16 +98,16 @@ class NPuzzleBase():
         return False
 
     @ classmethod
-    def find_index(cls, matrix: np.ndarray) -> tuple:
+    def find_index(cls, matrix: np.ndarray, to_find=0) -> tuple:
         # Line and colummn where 0 (blank tile) is
-        i, j = np.where(matrix == 0)
+        i, j = np.where(matrix == to_find)
 
         return int(i), int(j)
 
     @ classmethod
-    def move_left(cls, matrix: np.ndarray) -> np.ndarray:
+    def move_left(cls, matrix: np.ndarray, to_find=0) -> np.ndarray:
         # Finding blank tile
-        i, j = cls.find_index(matrix)
+        i, j = cls.find_index(matrix, to_find)
 
         # If blank tile is not in left column
         if j != 0:
@@ -115,15 +115,15 @@ class NPuzzleBase():
             # Swap blank tile with left tile
             temp_arr[i, j] = temp_arr[i, j-1]
             # Swapped tile = blank tile
-            temp_arr[i, j-1] = 0
+            temp_arr[i, j-1] = to_find
 
             return temp_arr
         return None
 
     @ classmethod
-    def move_right(cls, matrix: np.ndarray) -> np.ndarray:
+    def move_right(cls, matrix: np.ndarray, to_find=0) -> np.ndarray:
         # Finding blank tile
-        i, j = cls.find_index(matrix)
+        i, j = cls.find_index(matrix, to_find)
 
         # If blank tile is not in right column
         if j != len(matrix) - 1:
@@ -131,15 +131,15 @@ class NPuzzleBase():
             # Swap blank tile with right tile
             temp_arr[i, j] = temp_arr[i, j+1]
             # Swapped tile = blank tile
-            temp_arr[i, j+1] = 0
+            temp_arr[i, j+1] = to_find
 
             return temp_arr
         return None
 
     @ classmethod
-    def move_up(cls, matrix: np.ndarray) -> np.ndarray:
+    def move_up(cls, matrix: np.ndarray, to_find=0) -> np.ndarray:
         # Finding blank tile
-        i, j = cls.find_index(matrix)
+        i, j = cls.find_index(matrix, to_find)
 
         # If blank tile is not in first line
         if i != 0:
@@ -147,15 +147,15 @@ class NPuzzleBase():
             # Swap blank tile with up tile
             temp_arr[i, j] = temp_arr[i-1, j]
             # Swapped tile = blank tile
-            temp_arr[i-1, j] = 0
+            temp_arr[i-1, j] = to_find
 
             return temp_arr
         return None
 
     @ classmethod
-    def move_down(cls, matrix: np.ndarray) -> np.ndarray:
+    def move_down(cls, matrix: np.ndarray, to_find=0) -> np.ndarray:
         # Finding blank tile
-        i, j = cls.find_index(matrix)
+        i, j = cls.find_index(matrix, to_find)
 
         # If blank tile is not in last line
         if i != len(matrix)-1:
@@ -163,7 +163,7 @@ class NPuzzleBase():
             # Swap blank tile with down tile
             temp_arr[i, j] = temp_arr[i+1, j]
             # Swapped tile = blank tile
-            temp_arr[i+1, j] = 0
+            temp_arr[i+1, j] = to_find
 
             return temp_arr
         return None

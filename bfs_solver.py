@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 import time
+import uuid
 
 from logger import DEFAULT_FORMAT
 from n_puzzle_base import NPuzzleBase
@@ -20,9 +21,9 @@ logger.configure(
 
 N = 3
 # Saída para arquivo logger
-logger.add(f'./logs/{N}_puzzle.log', level=0, format=DEFAULT_FORMAT)
-logger.add(f'./logs/{N}_puzzle_info.log', level=20, format=DEFAULT_FORMAT)
-logger.add(f'./logs/{N}_puzzle_stats.log', level=38, format=DEFAULT_FORMAT)
+logger.add(f'./logs/{N}_puzzle_bfs.log', level=0, format=DEFAULT_FORMAT)
+logger.add(f'./logs/{N}_puzzle_bfs_info.log', level=20, format=DEFAULT_FORMAT)
+logger.add(f'./logs/{N}_puzzle_bfs_stats.log', level=38, format=DEFAULT_FORMAT)
 
 
 # Criação de Levels
@@ -88,17 +89,19 @@ class BFSSolver(NPuzzleBase):
 
 
 if __name__ == '__main__':
-    logger.info(f"Iniciando {N}-Puzzle")
+    for _ in range(50):
+        logger.info(f"Iniciando {N}-Puzzle BFS")
 
-    bfs = BFSSolver(N)
-    matrix = bfs.matrix
-    logger.debug(f"Matriz de entrada: \n{matrix}")
+        bfs = BFSSolver(N)
+        matrix = bfs.matrix
+        logger.debug(f"Matriz de entrada: \n{matrix}")
 
-    if bfs.check_both_conditions():
-        root = Node(0, matrix, None, None)
-        start = time.time()
-        goal, f_nodes, visited_nodes = bfs.solve(root)
-        end = time.time()
-        if goal:
-            logger.log("STATISTICS",
-                       f"Tempo: {end - start} segundos. Número de passos: {len(visited_nodes)}")
+        if bfs.check_both_conditions():
+            root = Node(0, matrix, None, None)
+            start = time.time()
+            goal, f_nodes, visited_nodes = bfs.solve(root)
+            end = time.time()
+            if goal:
+                logger.log(
+                    "STATISTICS",
+                    f"Tempo: {end - start: <25} Número de passos: {len(visited_nodes): <8} UUID: {uuid.uuid4()}")
