@@ -11,20 +11,10 @@ class NPuzzleBase():
         self.n_1 = self.n + 1
         self.n_root = int(math.sqrt(self.n_1))
         self.matrix = self.create_input_matrix()
+        # self.matrix = np.array([[2, 8, 3], [1, 6, 4], [7, 0, 5]])
         self.target_matrix = self.create_target_matrix()
+        # self.target_matrix = np.array([[1, 2, 3], [8, 0, 4], [7, 6, 5]])
 
-    # @staticmethod
-    # def create_user_input_matrix() -> np.ndarray:
-    #     print("Digite os números de cada linha da matriz, separando-os por espaço")
-
-    #     print("Linha 1:", )
-    #     a = [int(x) for x in input().split()]
-    #     print("Linha 2:", )
-    #     b = [int(x) for x in input().split()]
-    #     print("Linha 3")
-    #     c = [int(x) for x in input().split()]
-
-    #     return np.vstack((a, b, c))
 
     def create_input_matrix(self) -> np.ndarray:
         random_numbers = random.sample(range(0, self.n_1), self.n_1)

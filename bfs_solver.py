@@ -4,8 +4,9 @@ import time
 import uuid
 
 from logger import DEFAULT_FORMAT
-from n_puzzle_base import NPuzzleBase
 from loguru import logger
+
+from n_puzzle_base import NPuzzleBase
 
 # Configuração do Logger
 logger.configure(
@@ -19,7 +20,7 @@ logger.configure(
 )
 
 
-N = 3
+N = 8
 # Saída para arquivo logger
 logger.add(f'./logs/{N}_puzzle_bfs.log', level=0, format=DEFAULT_FORMAT)
 logger.add(f'./logs/{N}_puzzle_bfs_info.log', level=20, format=DEFAULT_FORMAT)
