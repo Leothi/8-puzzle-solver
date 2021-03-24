@@ -20,7 +20,7 @@ logger.configure(
 )
 
 
-N = 8
+N = 3
 # Saída para arquivo logger
 logger.add(f'./logs/{N}_puzzle_bfs.log', level=0, format=DEFAULT_FORMAT)
 logger.add(f'./logs/{N}_puzzle_bfs_info.log', level=20, format=DEFAULT_FORMAT)
@@ -90,19 +90,26 @@ class BFSSolver(NPuzzleBase):
 
 
 if __name__ == '__main__':
-    for _ in range(50):
-        logger.info(f"Iniciando {N}-Puzzle BFS")
+    # for _ in range(50):
+    logger.info(f"Iniciando {N}-Puzzle BFS")
 
-        bfs = BFSSolver(N)
-        matrix = bfs.matrix
-        logger.debug(f"Matriz de entrada: \n{matrix}")
+    bfs = BFSSolver(N)
+    matrix = bfs.matrix
+    flatten_matrix = list(i for j in matrix for i in j)
+    flatten_matrix_str = str(flatten_matrix).replace('[', '')
+    flatten_matrix_str = str(flatten_matrix_str).replace(']', '')
+    
+    with open('input_matrix.txt', 'w') as f:
+        f.write(flatten_matrix_str)
+        
+    logger.debug(f"Matriz de entrada: \n{matrix}")
 
-        if bfs.check_both_conditions():
-            root = Node(0, matrix, None, None)
-            start = time.time()
-            goal, f_nodes, visited_nodes = bfs.solve(root)
-            end = time.time()
-            if goal:
-                logger.log(
-                    "STATISTICS",
-                    f"Tempo: {end - start: <25} Número de passos: {len(visited_nodes): <8} UUID: {uuid.uuid4()}")
+    if bfs.check_both_conditions():
+        root = Node(0, matrix, None, None)
+        start = time.time()
+        goal, f_nodes, visited_nodes = bfs.solve(root)
+        end = time.time()
+        if goal:
+            logger.log(
+                "STATISTICS",
+                f"Tempo: {end - start: <25} Número de passos: {len(visited_nodes): <8} UUID: {uuid.uuid4()}")

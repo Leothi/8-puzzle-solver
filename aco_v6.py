@@ -20,7 +20,7 @@ logger.configure(
 )
 
 
-N = 8
+N = 3
 # Saída para arquivo logger
 logger.add(f'./logs/{N}_puzzle_aco.log', level=0, format=DEFAULT_FORMAT)
 logger.add(f'./logs/{N}_puzzle_aco_info.log', level=20, format=DEFAULT_FORMAT)

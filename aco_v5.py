@@ -20,7 +20,7 @@ logger.configure(
 )
 
 
-N = 8
+N = 3
 # Saída para arquivo logger
 logger.add(f'./logs/{N}_puzzle_aco.log', level=0, format=DEFAULT_FORMAT)
 logger.add(f'./logs/{N}_puzzle_aco_info.log', level=20, format=DEFAULT_FORMAT)
@@ -29,9 +29,6 @@ logger.add(f'./logs/{N}_puzzle_aco_stats.log', level=38, format=DEFAULT_FORMAT)
 
 # Criação de Levels
 logger.level(f"STATISTICS", no=38, color="<light-green>")
-
-N = 8
-
 
 class ACOSolver(NPuzzleBase):
     actions = ["down", "up", "left", "right"]
@@ -133,29 +130,29 @@ class ACOSolver(NPuzzleBase):
 
             diff_nums = current_matrix[diff_index]
             for diff_num in diff_nums:
-                if diff_num == 0:
-                    index = self.get_index_from_list(current_matrix, diff_num)
+                # if diff_num == 0:
+                index = self.get_index_from_list(current_matrix, diff_num)
 
-                    for move in self.actions:
-                        temp_data = self.move_tile(move, current_matrix, diff_num)
-                        if temp_data is not None:
-                            diff_index, n = self.get_diff_from_target(temp_data)
-                            logger.debug(f"MOVE = {move}, N = {n}")
-                            if n == 0:
-                                logger.success("ENCONTRADA")
-                                return temp_data
+                for move in self.actions:
+                    temp_data = self.move_tile(move, current_matrix, diff_num)
+                    if temp_data is not None:
+                        diff_index, n = self.get_diff_from_target(temp_data)
+                        logger.debug(f"MOVE = {move}, N = {n}")
+                        if n == 0:
+                            logger.success("ENCONTRADA")
+                            return temp_data
 
-                            old_phero = self.phero_matrix[move][index]                            
-                            phero_delta = self.calculate_delta_phero(n)
-                            phero_updated = self.update_phero(old_phero, phero_delta)
-                            phero_evaporated = self.apply_evaporation(phero_updated, 0.2)
-                            
-                            self.phero_matrix[move][index] = phero_evaporated
+                        old_phero = self.phero_matrix[move][index]                            
+                        phero_delta = self.calculate_delta_phero(n)
+                        phero_updated = self.update_phero(old_phero, phero_delta)
+                        phero_evaporated = self.apply_evaporation(phero_updated, 0.2)
+                        
+                        self.phero_matrix[move][index] = phero_evaporated
                             
             logger.debug(f"\n{self.phero_matrix}")
 
             list_biggest = self.sorted_phero_matrix()
-            # logger.debug(f"LISTA = {list_biggest}")
+            logger.debug(f"LISTA = {list_biggest}")
             
             for i, big in enumerate(list_biggest):
                 num, move, value = big
@@ -181,7 +178,7 @@ class ACOSolver(NPuzzleBase):
                         break
             
             # PARADA
-            if counter == 10000:
+            if counter == 1000:
                 n = 0
             # n=0
 
