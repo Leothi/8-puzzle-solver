@@ -105,6 +105,7 @@ if __name__ == '__main__':
     logger.debug(f"Matriz de entrada: \n{matrix}")
 
     if bfs.check_both_conditions():
+            
         root = Node(0, matrix, None, None)
         start = time.time()
         goal, f_nodes, visited_nodes = bfs.solve(root)
