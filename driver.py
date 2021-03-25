@@ -40,7 +40,7 @@ else:
     solution_metrics = solver.uninformed_search(search_method) 
 
 string = "N: {}".format(str(N)) + " Tempo: {}".format(
-    str(solution_metrics.search_time)) +" Numero de passos: {}".format(
+    str(float(solution_metrics.search_time) / 1000)) +" Numero de passos: {}".format(
     str(solution_metrics.search_depth))
 logging.warning(string)
 # logging.warning("PASSOS: %s", str(solution_metrics.search_depth))

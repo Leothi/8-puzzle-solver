@@ -1,5 +1,6 @@
 import sys
 import random
+import time
 import pandas as pd
 import numpy as np
 
@@ -20,7 +21,7 @@ logger.configure(
 )
 
 
-N = 3
+N = 8
 # Saída para arquivo logger
 logger.add(f'./logs/{N}_puzzle_aco.log', level=0, format=DEFAULT_FORMAT)
 logger.add(f'./logs/{N}_puzzle_aco_info.log', level=20, format=DEFAULT_FORMAT)
@@ -120,13 +121,17 @@ class ACOSolver(NPuzzleBase):
         current_matrix = matrix
         visited_matrix = []
         diff_index, n = self.get_diff_from_target(current_matrix)
-        counter = 0  
+        counter = 0 
+        n_perc = 0 
+        old_matrix = []
                            
         while n != 0:
             logger.info(f'COUNTER = {counter}')
             visited_matrix.append(current_matrix)
             counter += 1
             logger.debug(f"atual:\n{current_matrix}")
+            
+            old_matrix = current_matrix
 
             diff_nums = current_matrix[diff_index]
             for diff_num in diff_nums:
@@ -139,8 +144,9 @@ class ACOSolver(NPuzzleBase):
                         diff_index, n = self.get_diff_from_target(temp_data)
                         logger.debug(f"MOVE = {move}, N = {n}")
                         if n == 0:
-                            logger.success("ENCONTRADA")
-                            return temp_data
+                            n_perc = n / self.n_1
+                            logger.success("ENCONTRADA")                            
+                            return temp_data, counter, n_perc
 
                         old_phero = self.phero_matrix[move][index]                            
                         phero_delta = self.calculate_delta_phero(n)
@@ -176,6 +182,10 @@ class ACOSolver(NPuzzleBase):
                         logger.info(f"N = {n}")
                         logger.debug(f"MOVIMENTADA = {number, move}")
                         break
+            if (current_matrix == old_matrix).all():
+                logger.debug("TERMINADA")
+                n_perc = n / self.n_1
+                return current_matrix, counter, n_perc
             
             # PARADA
             if counter == 1000:
@@ -184,12 +194,18 @@ class ACOSolver(NPuzzleBase):
 
 
 if __name__ == '__main__':
-    aco = ACOSolver(N)
-    matrix = aco.matrix
-    
-    logger.debug(f"Matriz de entrada\n {matrix}")
-    logger.debug(f"Matriz target\n {aco.target_matrix}")
+    for _ in range(500):
+        aco = ACOSolver(N)
+        matrix = aco.matrix
+        
+        logger.debug(f"Matriz de entrada\n {matrix}")
+        logger.debug(f"Matriz target\n {aco.target_matrix}")
 
-    if aco.check_both_conditions():
-        matriz_final = aco.solve(aco, matrix)
-        logger.success(f"RESULTADO\n{matriz_final}")
+        if aco.check_both_conditions():
+            start = time.time()
+            matriz_final, counter, n_perc = aco.solve(aco, matrix)
+            end = time.time()
+            logger.success(f"RESULTADO\n{matriz_final}")
+            logger.log(
+                "STATISTICS",
+                f"Tempo: {end - start: <25} Número de passos: {counter: <8} N_perc: {n_perc}")

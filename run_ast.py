@@ -1,6 +1,6 @@
 from n_puzzle_base import NPuzzleBase
 
-N = 3
+N = 15
 
 n_puzzle = NPuzzleBase(N)
 matrix = n_puzzle.matrix
